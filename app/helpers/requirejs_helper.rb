@@ -66,6 +66,17 @@ module RequirejsHelper
 
       html.concat <<-HTML
       <script #{_requirejs_data(name, &block)} src="#{_javascript_path 'require.js'}"></script>
+      <script>
+        requirejs.createNode = function (config, moduleName, url) {
+          var node = config.xhtml ?
+          document.createElementNS('http://www.w3.org/1999/xhtml', 'html:script') :
+          document.createElement('script');
+          node.type = config.scriptType || 'text/javascript';
+          node.crossOrigin = 'anonymous';
+          node.async = true;
+          return node;
+        };
+      </script>
       HTML
 
       html.html_safe
